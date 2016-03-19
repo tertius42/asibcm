@@ -2,30 +2,22 @@
 
 typedef enum { false, true } bool;
 
-int size(char * x) {
+int size(char x[]) {
 	int i;
 	for (i = 0; x[i] != 0; i++);
 	return i;
 }
 
-char * exten(char * x) {
+int exten(char x[]) {
 	int track; //size of extension
-	for (int i = size(x)-1; (x[i] != '.') || (x[i] > 0); i--) {
+	for (int i = size(x)-1; (x[i] != '.') && (i > 0); i--) {
 		track++;
 	}
-	char * ext[track];
-	int sz = size(x);
-	int j = 0;
-	for (int i = sz - track; i < sz; i++) {
-		ext[j] = x[i];
-		j++;
-	}
-	ext[track-1] = '\0';
-	return ext;
+	return size(x) - track;
 }
 
 int main(int argc, char * argv[]) {
-	bool (*files)[argc];
+	bool files[argc];
 	for (int i = 0; i < argc; i++) {
 		files[i] = false;
 	}
@@ -41,8 +33,16 @@ int main(int argc, char * argv[]) {
 	}
 
 	if (!fileGiven) {
-		printf("usage: %s files",argv[0]);
+		printf("usage: %s files\n",argv[0]);
 		return 1;
+	}
+
+	for (int i = 1; i < argc; i++) {
+		if (files[i]) {
+			for (int j = exten(argv[i]); argv[i][j] != '\0'; j++)
+				printf("%c", argv[i][j]);
+			printf("\n");
+		}
 	}
 
 	return 0;
