@@ -1,11 +1,12 @@
-CC=gcc
+CXXFLAGS=-Wall -g
+CXX=g++
 DEBUG=
 
-.SUFFIXES: .c .o
+.SUFFIXES: .cpp .o
 
 OFILES= asibcm.o
 asibcm: $(OFILES)
-	$(CC) $(CXXFLAGS) $(DEBUG) $(OFILES) -o asibcm
+	$(CXX) $(CXXFLAGS) $(DEBUG) $(OFILES) -o asibcm
 
 clean:
 	-rm *.o asibcm
@@ -18,4 +19,4 @@ install: asibcm
 uninstall: asibcm
 	rm $(prefix)/bin/asibcm
 
-asibcm.o: asibcm.c 
+asibcm.o: asibcm.cpp 
