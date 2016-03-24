@@ -7,10 +7,10 @@ using namespace std;
 
 int find(vector<string> & vec, string & x) {
 	for (unsigned i = 0; i < vec.size(); i++) {
-		if (!vec[i].compare(x))
+		if (vec[i].compare(x) == 0)
 			return i;
 	}
-	return 0;
+	return -1;
 }
 
 string hex(int x) {
@@ -80,7 +80,7 @@ int main (int argc, char * argv[]) {
 			break;
 		string thisLabel = line.substr(0,line.find('\t'));
 		if (thisLabel.size() > 0) {
-			if (find(labels, thisLabel)) {
+			if (find(labels, thisLabel) != -1) {
 				fprintf(stderr, "error: in line %d of %s\n",i,argv[ibcm]);
 				fprintf(stderr, "\tmultiple definitions of label \'%s\'\n",thisLabel.c_str());
 				fprintf(stderr, "terminating...\n");
@@ -89,7 +89,7 @@ int main (int argc, char * argv[]) {
 			//printf("%s\n", thisLabel.c_str());
 		}
 		labels.push_back(thisLabel);
-//		printf("%d, \'%s\'\n",i, labels[i].c_str());
+//		printf("%d, \'%s\'\n",i-1, labels[i-1].c_str());
 	}
 
 	f.close();
@@ -141,7 +141,7 @@ int main (int argc, char * argv[]) {
 			cout << "2C00\t" << hex(i) << '\t' << line << endl;
 		else if (command == "load")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '3' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -154,7 +154,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "store")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '4' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -166,7 +166,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "add")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '5' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -178,7 +178,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "sub")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '6' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -190,7 +190,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "and")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '7' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -202,7 +202,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "or")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '8' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -214,7 +214,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "xor")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << '9' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -230,7 +230,7 @@ int main (int argc, char * argv[]) {
 			cout << "B000\t" << hex(i) << '\t' << line << endl;
 		else if (command == "jmp")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << 'C' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -242,7 +242,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "jmpe")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << 'D' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -254,7 +254,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "jmpl")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << 'E' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -266,7 +266,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "brl")
 			if (address.size() != 0) {
-				if (find(labels,address))
+				if (-1 < find(labels,address))
 					cout << 'F' << hex(find(labels,address)) << '\t' << hex(i) << '\t' << line << endl;
 				else {
 					fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
@@ -278,7 +278,7 @@ int main (int argc, char * argv[]) {
 			}
 		else if (command == "dw") {
 			if (address.size() != 0) {
-				if (!find(labels,address)) {
+				if (-1 == find(labels,address)) {
 					int value;
 					sscanf(address.c_str(), "%x", &value);
 					printf("%04x", value);
@@ -291,7 +291,7 @@ int main (int argc, char * argv[]) {
 				}
 			} else {
 				fprintf(stderr, "error: on line \'%d\' in file %s\n",i+1,argv[ibcm]);
-				fprintf(stderr, "\texpected label after command \'brl\'\n");
+				fprintf(stderr, "\texpected label after command \'dw\'\n");
 			}
 		}
 		else {
